@@ -1,28 +1,28 @@
-import { ChatMessage, useAppConfig, useChatStore } from "../store";
-import Locale from "../locales";
-import styles from "./exporter.module.scss";
-import { List, ListItem, Modal, Select, showToast } from "./ui-lib";
-import { IconButton } from "./button";
-import { copyToClipboard, downloadAs, useMobileScreen } from "../utils";
+import { ChatMessage, useAppConfig, useChatStore } from '../store';
+import Locale from '../locales';
+import styles from './exporter.module.scss';
+import { List, ListItem, Modal, Select, showToast } from './ui-lib';
+import { IconButton } from './button';
+import { copyToClipboard, downloadAs, useMobileScreen } from '../utils';
 
-import CopyIcon from "../icons/copy.svg";
-import LoadingIcon from "../icons/three-dots.svg";
-import ChatGptIcon from "../icons/chatgpt.png";
-import ShareIcon from "../icons/share.svg";
-import BotIcon from "../icons/bot.png";
+import CopyIcon from '../icons/copy.svg';
+import LoadingIcon from '../icons/three-dots.svg';
+import ChatGptIcon from '../icons/chatgpt.png';
+import ShareIcon from '../icons/share.svg';
+import BotIcon from '../icons/bot.png';
 
-import DownloadIcon from "../icons/download.svg";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { MessageSelector, useMessageSelector } from "./message-selector";
-import { Avatar } from "./emoji";
-import dynamic from "next/dynamic";
-import NextImage from "next/image";
+import DownloadIcon from '../icons/download.svg';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { MessageSelector, useMessageSelector } from './message-selector';
+import { Avatar } from './emoji';
+import dynamic from 'next/dynamic';
+import NextImage from 'next/image';
 
-import { toBlob, toJpeg, toPng } from "html-to-image";
-import { DEFAULT_MASK_AVATAR } from "../store/mask";
-import { api } from "../client/api";
-import { prettyObject } from "../utils/format";
-import { EXPORT_MESSAGE_CLASS_NAME } from "../constant";
+import { toBlob, toPng } from 'html-to-image';
+import { DEFAULT_MASK_AVATAR } from '../store/mask';
+import { api } from '../client/api';
+import { prettyObject } from '../utils/format';
+import { EXPORT_MESSAGE_CLASS_NAME } from '../constant';
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -270,32 +270,6 @@ export function PreviewActions(props: {
   const [loading, setLoading] = useState(false);
   const [shouldExport, setShouldExport] = useState(false);
 
-  const onRenderMsgs = (msgs: ChatMessage[]) => {
-    setShouldExport(false);
-
-    api
-      .share(msgs)
-      .then((res) => {
-        if (!res) return;
-        copyToClipboard(res);
-        setTimeout(() => {
-          window.open(res, "_blank");
-        }, 800);
-      })
-      .catch((e) => {
-        console.error("[Share]", e);
-        showToast(prettyObject(e));
-      })
-      .finally(() => setLoading(false));
-  };
-
-  const share = async () => {
-    if (props.messages?.length) {
-      setLoading(true);
-      setShouldExport(true);
-    }
-  };
-
   return (
     <>
       <div className={styles["preview-actions"]}>
@@ -315,27 +289,6 @@ export function PreviewActions(props: {
           icon={<DownloadIcon />}
           onClick={props.download}
         ></IconButton>
-        <IconButton
-          text={Locale.Export.Share}
-          bordered
-          shadow
-          icon={loading ? <LoadingIcon /> : <ShareIcon />}
-          onClick={share}
-        ></IconButton>
-      </div>
-      <div
-        style={{
-          position: "fixed",
-          right: "200vw",
-          pointerEvents: "none",
-        }}
-      >
-        {shouldExport && (
-          <RenderExport
-            messages={props.messages ?? []}
-            onRender={onRenderMsgs}
-          />
-        )}
       </div>
     </>
   );
