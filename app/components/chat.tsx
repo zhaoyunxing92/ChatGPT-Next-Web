@@ -6,7 +6,6 @@ import BrainIcon from '../icons/brain.svg';
 import RenameIcon from '../icons/rename.svg';
 import ExportIcon from '../icons/share.svg';
 import ReturnIcon from '../icons/return.svg';
-import CopyIcon from '../icons/copy.svg';
 import LoadingIcon from '../icons/three-dots.svg';
 import MaxIcon from '../icons/max.svg';
 import MinIcon from '../icons/min.svg';
