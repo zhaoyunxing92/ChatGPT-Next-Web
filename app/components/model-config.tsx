@@ -13,6 +13,7 @@ export function ModelConfigList(props: {
       <ListItem title={Locale.Settings.Model}>
         <Select
           value={props.modelConfig.model}
+          disabled={true}
           onChange={(e) => {
             props.updateConfig(
               (config) =>
@@ -54,8 +55,10 @@ export function ModelConfigList(props: {
       >
         <input
           type="number"
+          disabled={true}
+          readOnly={true}
           min={100}
-          max={32000}
+          max={1000}
           value={props.modelConfig.max_tokens}
           onChange={(e) =>
             props.updateConfig(

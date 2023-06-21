@@ -1,50 +1,28 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from 'react';
 
-import styles from "./settings.module.scss";
+import styles from './settings.module.scss';
 
-import ResetIcon from "../icons/reload.svg";
-import AddIcon from "../icons/add.svg";
-import CloseIcon from "../icons/close.svg";
-import CopyIcon from "../icons/copy.svg";
-import ClearIcon from "../icons/clear.svg";
-import LoadingIcon from "../icons/three-dots.svg";
-import EditIcon from "../icons/edit.svg";
-import EyeIcon from "../icons/eye.svg";
-import {
-  Input,
-  List,
-  ListItem,
-  Modal,
-  PasswordInput,
-  Popover,
-  Select,
-} from "./ui-lib";
-import { ModelConfigList } from "./model-config";
+import ResetIcon from '../icons/reload.svg';
+import AddIcon from '../icons/add.svg';
+import CloseIcon from '../icons/close.svg';
+import CopyIcon from '../icons/copy.svg';
+import ClearIcon from '../icons/clear.svg';
+import EditIcon from '../icons/edit.svg';
+import EyeIcon from '../icons/eye.svg';
+import { Input, List, ListItem, Modal, Popover, Select, } from './ui-lib';
+import { ModelConfigList } from './model-config';
 
-import { IconButton } from "./button";
-import {
-  SubmitKey,
-  useChatStore,
-  Theme,
-  useUpdateStore,
-  useAccessStore,
-  useAppConfig,
-} from "../store";
+import { IconButton } from './button';
+import { SubmitKey, Theme, useAccessStore, useAppConfig, useChatStore, useUpdateStore, } from '../store';
 
-import Locale, {
-  AllLangs,
-  ALL_LANG_OPTIONS,
-  changeLang,
-  getLang,
-} from "../locales";
-import { copyToClipboard } from "../utils";
-import Link from "next/link";
-import { Path, UPDATE_URL } from "../constant";
-import { Prompt, SearchService, usePromptStore } from "../store/prompt";
-import { ErrorBoundary } from "./error";
-import { InputRange } from "./input-range";
-import { useNavigate } from "react-router-dom";
-import { Avatar, AvatarPicker } from "./emoji";
+import Locale, { ALL_LANG_OPTIONS, AllLangs, changeLang, getLang, } from '../locales';
+import { copyToClipboard } from '../utils';
+import { Path } from '../constant';
+import { Prompt, SearchService, usePromptStore } from '../store/prompt';
+import { ErrorBoundary } from './error';
+import { InputRange } from './input-range';
+import { useNavigate } from 'react-router-dom';
+import { Avatar, AvatarPicker } from './emoji';
 
 function EditPromptModal(props: { id: number; onClose: () => void }) {
   const promptStore = usePromptStore();
@@ -259,10 +237,6 @@ export function Settings() {
     [],
   );
 
-  const promptStore = usePromptStore();
-  const builtinCount = SearchService.count.builtin;
-  const customCount = promptStore.getUserPrompts().length ?? 0;
-  const [shouldShowPromptModal, setShowPromptModal] = useState(false);
 
   const showUsage = accessStore.isAuthorized();
   useEffect(() => {
@@ -355,31 +329,6 @@ export function Settings() {
             </Popover>
           </ListItem>
 
-          <ListItem
-            title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
-            subTitle={
-              checkingUpdate
-                ? Locale.Settings.Update.IsChecking
-                : hasNewVersion
-                ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
-                : Locale.Settings.Update.IsLatest
-            }
-          >
-            {checkingUpdate ? (
-              <LoadingIcon />
-            ) : hasNewVersion ? (
-              <Link href={UPDATE_URL} target="_blank" className="link">
-                {Locale.Settings.Update.GoToUpdate}
-              </Link>
-            ) : (
-              <IconButton
-                icon={<ResetIcon></ResetIcon>}
-                text={Locale.Settings.Update.CheckUpdate}
-                onClick={() => checkUpdate(true)}
-              />
-            )}
-          </ListItem>
-
           <ListItem title={Locale.Settings.SendKey}>
             <Select
               value={config.submitKey}
@@ -464,55 +413,6 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-
-          <ListItem
-            title={Locale.Settings.Mask.Title}
-            subTitle={Locale.Settings.Mask.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={!config.dontShowMaskSplashScreen}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.dontShowMaskSplashScreen =
-                      !e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-        </List>
-
-        <List>
-          <ListItem
-            title={Locale.Settings.Prompt.Disable.Title}
-            subTitle={Locale.Settings.Prompt.Disable.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.disablePromptHint}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.disablePromptHint = e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-
-          <ListItem
-            title={Locale.Settings.Prompt.List}
-            subTitle={Locale.Settings.Prompt.ListCount(
-              builtinCount,
-              customCount,
-            )}
-          >
-            <IconButton
-              icon={<EditIcon />}
-              text={Locale.Settings.Prompt.Edit}
-              onClick={() => setShowPromptModal(true)}
-            />
-          </ListItem>
         </List>
 
         <List>
@@ -526,9 +426,6 @@ export function Settings() {
           />
         </List>
 
-        {shouldShowPromptModal && (
-          <UserPromptModal onClose={() => setShowPromptModal(false)} />
-        )}
       </div>
     </ErrorBoundary>
   );
