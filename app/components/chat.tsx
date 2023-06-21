@@ -339,7 +339,6 @@ export function ChatActions(props: {
     hitBottom: boolean;
 }) {
     const config = useAppConfig();
-    const navigate = useNavigate();
     const chatStore = useChatStore();
 
     // switch themes

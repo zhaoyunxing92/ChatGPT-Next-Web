@@ -1,22 +1,16 @@
-import DeleteIcon from "../icons/delete.svg";
-import BotIcon from "../icons/bot.svg";
+import DeleteIcon from '../icons/delete.svg';
 
-import styles from "./home.module.scss";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  OnDragEndResponder,
-} from "@hello-pangea/dnd";
+import styles from './home.module.scss';
+import { DragDropContext, Draggable, Droppable, OnDragEndResponder, } from '@hello-pangea/dnd';
 
-import { useChatStore } from "../store";
+import { useChatStore } from '../store';
 
-import Locale from "../locales";
-import { Link, useNavigate } from "react-router-dom";
-import { Path } from "../constant";
-import { MaskAvatar } from "./mask";
-import { Mask } from "../store/mask";
-import { useRef, useEffect } from "react";
+import Locale from '../locales';
+import { useNavigate } from 'react-router-dom';
+import { Path } from '../constant';
+import { MaskAvatar } from './mask';
+import { Mask } from '../store/mask';
+import { useEffect, useRef } from 'react';
 
 export function ChatItem(props: {
   onClick?: () => void;
