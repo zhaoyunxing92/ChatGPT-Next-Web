@@ -1,16 +1,16 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-import { trimTopic } from "../utils";
+import { trimTopic } from '../utils';
 
-import Locale from "../locales";
-import { showToast } from "../components/ui-lib";
-import { ModelType } from "./config";
-import { createEmptyMask, Mask } from "./mask";
-import { StoreKey } from "../constant";
-import { api, RequestMessage } from "../client/api";
-import { ChatControllerPool } from "../client/controller";
-import { prettyObject } from "../utils/format";
+import Locale from '../locales';
+import { showToast } from '../components/ui-lib';
+import { ModelType } from './config';
+import { createEmptyMask, Mask } from './mask';
+import { StoreKey } from '../constant';
+import { api, RequestMessage } from '../client/api';
+import { ChatControllerPool } from '../client/controller';
+import { prettyObject } from '../utils/format';
 
 export type ChatMessage = RequestMessage & {
   date: string;
@@ -219,9 +219,7 @@ export const useChatStore = create<ChatStore>()(
           set(() => ({ currentSessionIndex: index }));
         }
 
-        const session = sessions[index];
-
-        return session;
+        return sessions[ index ];
       },
 
       onNewMessage(message) {
@@ -278,9 +276,9 @@ export const useChatStore = create<ChatStore>()(
 
         // make request
         console.log("[User Input] ", sendMessages);
-        api.llm.chat({
+        await api.llm.chat({
           messages: sendMessages,
-          config: { ...modelConfig, stream: true },
+          config: {...modelConfig, stream: true},
           onUpdate(message) {
             botMessage.streaming = true;
             if (message) {
@@ -295,27 +293,27 @@ export const useChatStore = create<ChatStore>()(
               get().onNewMessage(botMessage);
             }
             ChatControllerPool.remove(
-              sessionIndex,
-              botMessage.id ?? messageIndex,
+                sessionIndex,
+                botMessage.id ?? messageIndex,
             );
             set(() => ({}));
           },
           onError(error) {
             const isAborted = error.message.includes("aborted");
             botMessage.content =
-              "\n\n" +
-              prettyObject({
-                error: true,
-                message: error.message,
-              });
+                "\n\n" +
+                prettyObject({
+                  error: true,
+                  message: error.message,
+                });
             botMessage.streaming = false;
             userMessage.isError = !isAborted;
             botMessage.isError = !isAborted;
 
             set(() => ({}));
             ChatControllerPool.remove(
-              sessionIndex,
-              botMessage.id ?? messageIndex,
+                sessionIndex,
+                botMessage.id ?? messageIndex,
             );
 
             console.error("[Chat] failed ", error);
@@ -323,9 +321,9 @@ export const useChatStore = create<ChatStore>()(
           onController(controller) {
             // collect controller for stop/retry
             ChatControllerPool.addController(
-              sessionIndex,
-              botMessage.id ?? messageIndex,
-              controller,
+                sessionIndex,
+                botMessage.id ?? messageIndex,
+                controller,
             );
           },
         });
